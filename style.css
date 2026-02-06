@@ -299,54 +299,63 @@ a:hover {
     animation: fadeInRight 0.8s ease 0.2s both;
 }
 
-/* Code Card */
-.hero-card {
+/* Hero Stats Card */
+.hero-stats-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    max-width: 400px;
+}
+
+.hero-stat-item {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
-}
-
-.card-header {
+    padding: 1.5rem;
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 1rem 1.25rem;
-    background: rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid var(--border-color);
+    gap: 1rem;
+    transition: all 0.3s ease;
 }
 
-.card-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+.hero-stat-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
 }
 
-.card-dot:nth-child(1) { background: #ff5f56; }
-.card-dot:nth-child(2) { background: #ffbd2e; }
-.card-dot:nth-child(3) { background: #27c93f; }
-
-.card-code {
-    padding: 1.5rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
-    line-height: 1.8;
-    margin: 0;
-    overflow-x: auto;
-    background: transparent;
+.hero-stat-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.card-code code {
-    white-space: pre;
+.hero-stat-icon i {
+    font-size: 1.25rem;
+    color: white;
 }
 
-/* Syntax Highlighting */
-.code-keyword { color: #c792ea; }
-.code-key { color: #f78c6c; }
-.code-string { color: #c3e88d; }
-.code-number { color: #f78c6c; }
-.code-boolean { color: #89ddff; }
+.hero-stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.hero-stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
 
 /* Scroll Indicator */
 .scroll-indicator {
