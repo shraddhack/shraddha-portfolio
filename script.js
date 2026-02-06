@@ -22,37 +22,31 @@ function updateThemeIcon(theme) {
 }
 
 // Mobile Menu Toggle
-const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-const navLinks = document.getElementById('nav-links');
+const navToggle = document.getElementById('nav-toggle');
+const navMenu = document.getElementById('nav-menu');
 
-mobileMenuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    const icon = mobileMenuBtn.querySelector('i');
-    icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+navToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+    navToggle.classList.toggle('active');
 });
 
 // Close mobile menu when clicking a link
-document.querySelectorAll('.nav-links a').forEach(link => {
+document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        mobileMenuBtn.querySelector('i').className = 'fas fa-bars';
+        navMenu.classList.remove('active');
+        navToggle.classList.remove('active');
     });
 });
 
 // Navbar scroll effect
 const navbar = document.querySelector('.navbar');
-let lastScroll = 0;
 
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > 50) {
+    if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
     } else {
         navbar.classList.remove('scrolled');
     }
-
-    lastScroll = currentScroll;
 });
 
 // Smooth scroll for anchor links
@@ -72,7 +66,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Intersection Observer for fade-in animations
+// Intersection Observer for animations
 const observerOptions = {
     root: null,
     rootMargin: '0px',
@@ -87,96 +81,68 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe all elements with fade-in class
-document.querySelectorAll('.fade-in').forEach(el => {
-    observer.observe(el);
-});
-
-// Add fade-in class to sections
-document.querySelectorAll('section').forEach(section => {
-    section.classList.add('fade-in');
+// Observe sections for fade-in
+document.querySelectorAll('.section').forEach(section => {
     observer.observe(section);
 });
 
-// Typing effect for code card (optional enhancement)
-function typeCode() {
-    const codeLines = document.querySelectorAll('.code-line');
-    codeLines.forEach((line, index) => {
-        line.style.opacity = '0';
-        line.style.transform = 'translateX(-10px)';
-
-        setTimeout(() => {
-            line.style.transition = 'all 0.3s ease';
-            line.style.opacity = '1';
-            line.style.transform = 'translateX(0)';
-        }, index * 100 + 500);
-    });
-}
-
-// Run typing effect when page loads
-window.addEventListener('load', typeCode);
-
 // Active navigation link highlighting
 const sections = document.querySelectorAll('section[id]');
-const navItems = document.querySelectorAll('.nav-links a');
+const navLinks = document.querySelectorAll('.nav-link');
 
-window.addEventListener('scroll', () => {
-    let current = '';
-    const navHeight = navbar.offsetHeight;
+function highlightNavLink() {
+    const scrollPos = window.scrollY + 100;
 
     sections.forEach(section => {
-        const sectionTop = section.offsetTop - navHeight - 100;
+        const sectionTop = section.offsetTop;
         const sectionHeight = section.offsetHeight;
+        const sectionId = section.getAttribute('id');
 
-        if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
-            current = section.getAttribute('id');
+        if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${sectionId}`) {
+                    link.classList.add('active');
+                }
+            });
         }
-    });
-
-    navItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('href') === `#${current}`) {
-            item.classList.add('active');
-        }
-    });
-});
-
-// Parallax effect for hero background
-const heroBg = document.querySelector('.hero-bg');
-if (heroBg) {
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        heroBg.style.transform = `translateY(${scrolled * 0.3}px)`;
     });
 }
 
-// Stats counter animation
+window.addEventListener('scroll', highlightNavLink);
+
+// Animate stats when visible
+const stats = document.querySelectorAll('.stat-number');
+let statsAnimated = false;
+
 function animateStats() {
-    const statNumbers = document.querySelectorAll('.stat-number');
+    if (statsAnimated) return;
 
-    statNumbers.forEach(stat => {
-        const target = stat.textContent;
-        const isNumber = !isNaN(parseInt(target));
+    stats.forEach(stat => {
+        const text = stat.textContent;
+        const hasPlus = text.includes('+');
+        const number = parseInt(text.replace(/[^0-9]/g, ''));
 
-        if (isNumber) {
-            const targetNum = parseInt(target);
-            let current = 0;
-            const increment = targetNum / 50;
-            const suffix = target.replace(/[0-9]/g, '');
+        if (isNaN(number)) return;
 
-            const updateCounter = () => {
-                if (current < targetNum) {
-                    current += increment;
-                    stat.textContent = Math.ceil(current) + suffix;
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    stat.textContent = target;
-                }
-            };
+        let current = 0;
+        const increment = number / 40;
+        const suffix = hasPlus ? '+' : '';
 
-            updateCounter();
-        }
+        const updateCounter = () => {
+            if (current < number) {
+                current += increment;
+                stat.textContent = Math.ceil(current) + suffix;
+                requestAnimationFrame(updateCounter);
+            } else {
+                stat.textContent = number + suffix;
+            }
+        };
+
+        updateCounter();
     });
+
+    statsAnimated = true;
 }
 
 // Trigger stats animation when about section is visible
@@ -185,7 +151,7 @@ if (aboutSection) {
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                animateStats();
+                setTimeout(animateStats, 300);
                 statsObserver.unobserve(entry.target);
             }
         });
@@ -194,33 +160,56 @@ if (aboutSection) {
     statsObserver.observe(aboutSection);
 }
 
-// Project card hover effects
-document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-8px) scale(1.02)';
-    });
-
-    card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
-    });
-});
-
-// Timeline animation on scroll
+// Timeline animation
 const timelineItems = document.querySelectorAll('.timeline-item');
 const timelineObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+    entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateX(0)';
+            setTimeout(() => {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateX(0)';
+            }, index * 100);
         }
     });
 }, { threshold: 0.2 });
 
 timelineItems.forEach(item => {
+    item.style.opacity = '0';
+    item.style.transform = 'translateX(-20px)';
+    item.style.transition = 'all 0.6s ease';
     timelineObserver.observe(item);
 });
 
+// Project cards hover effect
+document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-8px)';
+    });
+
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+});
+
+// Typing effect for code card
+function typeCode() {
+    const codeElement = document.querySelector('.card-code code');
+    if (!codeElement) return;
+
+    const lines = codeElement.innerHTML.split('\n');
+    codeElement.innerHTML = '';
+
+    lines.forEach((line, index) => {
+        setTimeout(() => {
+            codeElement.innerHTML += line + (index < lines.length - 1 ? '\n' : '');
+        }, index * 80);
+    });
+}
+
+// Run typing effect after a delay
+setTimeout(typeCode, 500);
+
 // Console Easter Egg
 console.log('%c Welcome! 👋', 'font-size: 24px; font-weight: bold; color: #6366f1;');
-console.log('%c Shraddha Phadnis - FPGA & Embedded Systems Engineer', 'font-size: 14px; color: #a855f7;');
-console.log('%c Interested in collaboration? Reach out via LinkedIn!', 'font-size: 12px; color: #64748b;');
+console.log('%c Shraddha Phadnis - Staff Engineer', 'font-size: 14px; color: #a855f7;');
+console.log('%c FPGA | Embedded Systems | 5G/NR', 'font-size: 12px; color: #64748b;');
