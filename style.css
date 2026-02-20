@@ -299,7 +299,7 @@ a:hover {
     animation: fadeInRight 0.8s ease 0.2s both;
 }
 
-/* Code Card */
+/* Achievement Card */
 .hero-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -308,45 +308,136 @@ a:hover {
     box-shadow: var(--shadow-lg);
 }
 
-.card-header {
+.achievements-card {
+    padding: 2rem;
+}
+
+.achievement-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.ieee-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 12px;
+    color: white;
+}
+
+.ieee-badge i {
+    font-size: 2rem;
+}
+
+.badge-title {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.badge-subtitle {
+    display: block;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.achievement-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.achievement-stat {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 1rem 1.25rem;
-    background: rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid var(--border-color);
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(99, 102, 241, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: all 0.3s ease;
 }
 
-.card-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+.achievement-stat:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
 }
 
-.card-dot:nth-child(1) { background: #ff5f56; }
-.card-dot:nth-child(2) { background: #ffbd2e; }
-.card-dot:nth-child(3) { background: #27c93f; }
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
 
-.card-code {
-    padding: 1.5rem;
-    font-family: 'JetBrains Mono', monospace;
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.achievement-tech {
+    text-align: center;
+}
+
+.achievement-tech h4 {
     font-size: 0.9rem;
-    line-height: 1.8;
-    margin: 0;
-    overflow-x: auto;
-    background: transparent;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.card-code code {
-    white-space: pre;
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
 }
 
-/* Syntax Highlighting */
-.code-keyword { color: #c792ea; }
-.code-key { color: #f78c6c; }
-.code-string { color: #c3e88d; }
-.code-number { color: #f78c6c; }
-.code-boolean { color: #89ddff; }
+.tech-tags span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.tech-tags span:hover {
+    border-color: var(--accent);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.tech-tags i {
+    color: var(--accent);
+}
 
 /* Scroll Indicator */
 .scroll-indicator {
@@ -1250,6 +1341,20 @@ a:hover {
 
     .hero-title {
         font-size: 1.2rem;
+    }
+
+    .achievement-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .achievement-stat {
+        justify-content: center;
+    }
+
+    .ieee-badge {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
     }
 
     .section {
